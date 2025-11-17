@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NayanBazigaar Shop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #3399cc;
+      color: white;
+      padding: 20px;
+    }
+    header img {
+      width: 80px;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
+    header h1 {
+      display: inline-block;
+      margin-left: 15px;
+      vertical-align: middle;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 30px;
+      gap: 20px;
+    }
+    .product {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      width: 220px;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .product h2 {
+      font-size: 18px;
+      margin: 10px 0 5px 0;
+    }
+    .product p {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+    .product button {
+      background-color: #3399cc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .product button:hover {
+      background-color: #2277aa;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="images/logo.png" alt="Logo">
+  <h1>NayanBazigaar Shop</h1>
+</header>
+
+<div class="products">
+  <!-- Product 1 -->
+  <div class="product" onclick="openProduct('Product 1','images/product1.png','500')">
+    <img src="images/product1.png" alt="Product 1">
+    <h2>Product 1</h2>
+    <p>Price: ₹500</p>
+    <button onclick="buyNow(event,'Product 1',500,'images/product1.png')">Buy Now</button>
+  </div>
+
+  <!-- Product 2 -->
+  <div class="product" onclick="openProduct('Product 2','images/product2.png','800')">
+    <img src="images/product2.png" alt="Product 2">
+    <h2>Product 2</h2>
+    <p>Price: ₹800</p>
+    <button onclick="buyNow(event,'Product 2',800,'images/product2.png')">Buy Now</button>
+  </div>
+
+  <!-- Product 3 -->
+  <div class="product" onclick="openProduct('Product 3','images/product3.png','1200')">
+    <img src="images/product3.png" alt="Product 3">
+    <h2>Product 3</h2>
+    <p>Price: ₹1200</p>
+    <button onclick="buyNow(event,'Product 3',1200,'images/product3.png')">Buy Now</button>
+  </div>
+</div>
+
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  function buyNow(event, name, price, img){
+    event.stopPropagation();
+    var options = {
+      "key": "YOUR_RAZORPAY_KEY_ID", // তোমার Razorpay Key ID
+      "amount": price*100, // Price in paise
+      "currency": "INR",
+      "name": name,
+      "description": "Purchase from NayanBazigaar",
+      "image": img,
+      "handler": function (response){
+          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+      },
+      "prefill": {
+          "name": "",
+          "email": "",
+          "contact": ""
+      },
+      "theme": {
+          "color": "#3399cc"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+
+  function openProduct(name,img,price){
+    var html = `
+      <div style="text-align:center;padding:50px;">
+        <h2>${name}</h2>
+        <img src="${img}" style="max-width:300px;border-radius:10px;">
+        <p>Price: ₹${price}</p>
+        <button onclick="buyNow(event,'${name}',${price},'${img}')">Buy Now</button>
+        <br><br>
+        <button onclick="location.reload()">Back to Shop</button>
+      </div>
+    `;
+    document.body.innerHTML = html;
+  }
+</script>
+
+</body>
+</html>
